@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CWA Help Desk Appointment</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="top-brand" aria-label="University branding">
+        <img src="logo.png" alt="Swinburne logo" class="brand-logo" />
+      </header>
+
+      <section class="form-card">
+        <h1>CWA Help Desk Appointment</h1>
+
+        <p class="intro">
+          The Help Desk is located in ATC620. Open 10:30 to 19:00 Monday to Friday.<br />
+          Check Blackboard for when CWA tutors will be there.
+        </p>
+
+        <form id="appointmentForm" novalidate>
+          <fieldset class="field-group">
+            <legend>Student details</legend>
+
+            <div class="row two-col">
+              <div class="field">
+                <label for="studentId">Student ID</label>
+                <input
+                  id="studentId"
+                  name="studentId"
+                  type="text"
+                  inputmode="numeric"
+                  pattern="[0-9]{7,10}"
+                  maxlength="10"
+                  placeholder="e.g. 1234567"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="row two-col">
+              <div class="field">
+                <label for="givenName">Given Name</label>
+                <input
+                  id="givenName"
+                  name="givenName"
+                  type="text"
+                  pattern="[A-Za-z ]{1,15}"
+                  maxlength="15"
+                  placeholder="Given Name"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="familyName">Family Name</label>
+                <input
+                  id="familyName"
+                  name="familyName"
+                  type="text"
+                  pattern="[A-Za-z ]{1,15}"
+                  maxlength="15"
+                  placeholder="Family Name"
+                  required
+                />
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group">
+            <legend>Your unit</legend>
+
+            <div class="unit-options">
+              <label><input type="radio" name="unit" value="COS10011" required /> COS10011</label>
+              <label><input type="radio" name="unit" value="COS60004" /> COS60004</label>
+              <label><input type="radio" name="unit" value="COS60007" /> COS60007</label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group">
+            <legend>Your Tutor</legend>
+
+            <div class="field">
+              <select id="tutor" name="tutor" required>
+                <option value="">Please Select</option>
+                <option value="Tutor A">Tutor A</option>
+                <option value="Tutor B">Tutor B</option>
+                <option value="Tutor C">Tutor C</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group">
+            <legend>Issue</legend>
+
+            <div class="checkbox-grid">
+              <label><input type="checkbox" name="issue" value="HTML" /> HTML</label>
+              <label><input type="checkbox" name="issue" value="CSS" /> CSS</label>
+              <label><input type="checkbox" name="issue" value="JavaScript" /> JavaScript</label>
+              <label><input type="checkbox" name="issue" value="PHP" /> PHP</label>
+              <label><input type="checkbox" name="issue" value="MySQL" /> MySQL</label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group">
+            <legend>Description of Issue</legend>
+            <div class="field">
+              <textarea
+                id="issueDescription"
+                name="issueDescription"
+                rows="5"
+                placeholder="Write description of your problem here..."
+              ></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group">
+            <legend>Preferred Date / Time</legend>
+
+            <div class="row date-time-row">
+              <div class="field">
+                <label for="preferredDate">Date</label>
+                <input id="preferredDate" name="preferredDate" type="date" required />
+              </div>
+
+              <div class="field">
+                <label for="preferredTime">Time</label>
+                <input id="preferredTime" name="preferredTime" type="time" required />
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="actions">
+            <button type="submit" class="primary">Book</button>
+            <button type="reset" class="secondary">Reset</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
