@@ -12,16 +12,54 @@ document.addEventListener('DOMContentLoaded', () => {
   const preferredDate = document.getElementById('preferredDate');
   const preferredTime = document.getElementById('preferredTime');
 
-  function validateRequiredRadioGroup() {
-    const selectedUnit = form.querySelector('input[name="unit"]:checked');
-    const unitRadioButtons = form.querySelectorAll('input[name="unit"]');
+  function sanitizeDateInput(input) {
+    const digits = input.value.replace(/\D/g, '').slice(0, 8);
+    let day = digits.slice(0, 2);
+    let month = digits.slice(2, 4);
+    let year = digits.slice(4, 8);
 
-    unitRadioButtons.forEach((radio) => {
-      radio.setCustomValidity('');
-    });
+    let formatted = day;
+    if (digits.length > 2) {
+      formatted += '/' + month;
+    }
+    if (digits.length > 4) {
+      formatted += '/' + year;
+    }
+
+    input.value = formatted;
+  }
+
+  function sanitizeTimeInput(input) {
+    const digits = input.value.replace(/\D/g, '').slice(0, 4);
+    let hour = digits.slice(0, 2);
+    let minute = digits.slice(2, 4);
+
+    let formatted = hour;
+    if (digits.length > 2) {
+      formatted += ':' + minute;
+    }
+
+    input.value = formatted;
+  }
+
+  if (preferredDate) {
+    preferredDate.addEventListener('input', () => sanitizeDateInput(preferredDate));
+  }
+
+  if (preferredTime) {
+    preferredTime.addEventListener('input', () => sanitizeTimeInput(preferredTime));
+  }
+
+  function validateRequiredRadioGroup() {
+    const unitRadioButtons = form.querySelectorAll('input[name="unit"]');
+    const selectedUnit = form.querySelector('input[name="unit"]:checked');
+
+    unitRadioButtons.forEach((radio) => radio.setCustomValidity(''));
 
     if (!selectedUnit) {
-      unitRadioButtons.forEach((radio) => radio.setCustomValidity('Please select your unit.'));
+      unitRadioButtons.forEach((radio) => {
+        radio.setCustomValidity('Please select your unit.');
+      });
       return false;
     }
 
@@ -63,11 +101,18 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
-  function validateDateTime(field, message) {
-    if (!field || !field.value) {
-      if (field) {
-        field.setCustomValidity(message);
-      }
+  function validateDateTime(field, pattern, message) {
+    if (!field) {
+      return true;
+    }
+
+    if (!field.value) {
+      field.setCustomValidity(message);
+      return false;
+    }
+
+    if (!pattern.test(field.value)) {
+      field.setCustomValidity(message);
       return false;
     }
 
@@ -78,13 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    const isStudentIdValid = validateTextField(studentId, /^[0-9]{7,10}$/, 'Enter a student ID with 7 to 10 digits.');
-    const isGivenNameValid = validateTextField(givenName, /^[A-Za-z ]{1,15}$/, 'Use letters only, up to 15 characters.');
-    const isFamilyNameValid = validateTextField(familyName, /^[A-Za-z ]{1,15}$/, 'Use letters only, up to 15 characters.');
+    const isStudentIdValid = validateTextField(studentId, /^[0-9]{7,10}$/, 'Student ID must contain between 7 and 10 digits.');
+    const isGivenNameValid = validateTextField(givenName, /^[A-Za-z ]{1,15}$/, 'Only alphabetic characters are allowed.');
+    const isFamilyNameValid = validateTextField(familyName, /^[A-Za-z ]{1,15}$/, 'Only alphabetic characters are allowed.');
     const isTutorValid = validateSelectField(tutor, 'Please select your tutor.');
     const isUnitValid = validateRequiredRadioGroup();
-    const isDateValid = validateDateTime(preferredDate, 'Please select a preferred date.');
-    const isTimeValid = validateDateTime(preferredTime, 'Please select a preferred time.');
+    const isDateValid = validateDateTime(preferredDate, /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/, 'Please enter a valid date in dd/mm/yyyy format.');
+    const isTimeValid = validateDateTime(preferredTime, /^([01][0-9]|2[0-3]):[0-5][0-9]$/, 'Please enter a valid time in 24-hour format.');
 
     if (
       isStudentIdValid &&
